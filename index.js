@@ -1,4 +1,5 @@
 import * as THREE from './node_modules/three/build/three.module.js';
+import Die from './die.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -7,29 +8,28 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
+camera.position.z = 10;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-camera.position.z = 10;
+const cube = new Die (scene)
 
 var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.y = 0
+directionalLight.position.y = 4
 directionalLight.position.z = 10
 scene.add(directionalLight);
-
 renderer.setClearColor(0xCDCDCD, 1);
 
+const speed = { value: 0.3 };
+const speed2 = { value: 0.3 };
+
 function animate() {
-  cube.rotation.x += 0.1;
-  cube.rotation.y += 0.07;
+  cube.tick();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
+const time = new Date();
+cube.startRoll();
 animate();
