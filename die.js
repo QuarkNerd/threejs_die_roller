@@ -30,7 +30,8 @@ class Die {
   getMutableRotation = () => this.mesh.rotation;
   
   startRoll() {
-    this.rotationSpeed = 0.3;
+    this.rotationSpeed = (3 + Math.random()) * 0.1;;
+    this.deceleration = (2 + 4* Math.random()) * 0.001;
     const randomNum = Math.floor(Math.random() * this.countTriangleFaces);
     const randomFace = this.mesh.geometry.faces[randomNum];
     const normal = randomFace.normal;
@@ -49,7 +50,7 @@ class Die {
     if (this.rotationSpeed > 0.08) {
       rotation.x += this.rotationSpeed;
       rotation.y += this.rotationSpeed;
-      this.rotationSpeed -= 0.005 * Math.random();
+      this.rotationSpeed -= this.deceleration;
     } else if (diff > 0.041 && diff < 2*Math.PI -0.041 ) {
       rotation.x += this.rotationSpeed;
       rotation.y += this.rotationSpeed;
