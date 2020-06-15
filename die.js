@@ -1,28 +1,55 @@
 import * as THREE from './node_modules/three/build/three.module.js';
-
-const geometry = new THREE.TetrahedronGeometry();
-const material = new THREE.MeshLambertMaterial({ color: 0x00FF00,  map: THREE.ImageUtils.loadTexture("faces/6.png") });
-const material1 = new THREE.MeshLambertMaterial({ color: 0x00FF00,  map: THREE.ImageUtils.loadTexture("faces/5.png") });
-const material2 = new THREE.MeshLambertMaterial({ color: 0x00FF00,  map: THREE.ImageUtils.loadTexture("faces/4.png") });
-const material3 = new THREE.MeshLambertMaterial({ color: 0x00FF00,  map: THREE.ImageUtils.loadTexture("faces/3.png") });
-const material4 = new THREE.MeshLambertMaterial({ color: 0x00FF00,  map: THREE.ImageUtils.loadTexture("faces/2.png") });
-const materialNum = new THREE.MeshLambertMaterial({ color: 0x00FF00,  map: THREE.ImageUtils.loadTexture("faces/1.png") });
-const matArray = [material, materialNum, material1, material2, material3, material4]
 const direction = new THREE.Vector3(0, 0, 1); 
+const textureLoader = new THREE.TextureLoader()
+
+// boundary designed to fit square perfectly in triangle
+const triangleBoundary = [
+  new THREE.Vector2(-0.58, 0),
+  new THREE.Vector2(1.58, 0),
+  new THREE.Vector2(0.5, 1.87),
+];
+
+const faces = [];
+for (let i = 1; i < 7; i++) {
+  faces.push(textureLoader.load(`faces/${i}.png`));
+}
+
+const D4_geom = new THREE.TetrahedronGeometry();
+D4_geom.faceVertexUvs[0] = new Array(4).fill(triangleBoundary);
+D4_geom.faces.forEach((face, i) => {
+  face.materialIndex = i
+});
+
+
+const detailsByDiceType = {
+  4 :  {
+    geometry: D4_geom,
+    triangleFaceCount : 4,
+  },
+  6 :  { 
+    geometry: new THREE.BoxGeometry(),
+    triangleFaceCount: 12
+  },
+}
 
 class Die {
-  constructor(scene) {
-    this.mesh = new THREE.Mesh(geometry, matArray);
+  constructor(scene, numSides, colorHex = 0x00FF00) {
+    const details = detailsByDiceType[numSides];
+    const materialArray = Array.apply(null, Array(numSides)).map((_, i) => 
+      new THREE.MeshLambertMaterial({ color: colorHex, map: faces[i] }));
+    this.mesh = new THREE.Mesh(details.geometry, materialArray);
+    this.countTriangleFaces = details.triangleFaceCount;
     scene.add(this.mesh);
+    console.log(this)
   }
   
   getMutablePosition = () => this.mesh.position;
   
   getMutableRotation = () => this.mesh.rotation;
   
-  startRoll = () => {
-    this.rotationSpeed = 0.5;
-    const randomNum = Math.floor(Math.random() * 11);
+  startRoll() {
+    this.rotationSpeed = 0.3;
+    const randomNum = Math.floor(Math.random() * this.countTriangleFaces);
     const randomFace = this.mesh.geometry.faces[randomNum];
     const normal = randomFace.normal;
 
@@ -30,12 +57,11 @@ class Die {
     this.targetX = (this.mesh.rotation.x+2*Math.PI)%(2*Math.PI);
   }
 
-  tick = () => this.updateRotation();
+  tick() { 
+    this.updateRotation();
+  }
   
   updateRotation() {
-    // console.log(this.mesh.geometry.faces);
-    // this.mesh.geometry.elementsNeedUpdate = true; 
-    // this.mesh.geometry.colorsNeedUpdate = true; 
     const diff = (this.mesh.rotation.x - this.targetX) %(2*Math.PI);
     const rotation = this.mesh.rotation;
     if (this.rotationSpeed > 0.08) {
@@ -46,9 +72,6 @@ class Die {
       rotation.x += this.rotationSpeed;
       rotation.y += this.rotationSpeed;
       this.rotationSpeed -= 0.0005 * Math.random();
-      console.log(rotation.x);
-    } else {
-      console.log(rotation.x);
     }
   }
 }
