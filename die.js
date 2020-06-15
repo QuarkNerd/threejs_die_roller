@@ -10,35 +10,17 @@ const triangleBoundary = [
 ];
 
 const faces = [];
-for (let i = 1; i < 7; i++) {
+for (let i = 1; i < 9; i++) {
   faces.push(textureLoader.load(`faces/${i}.png`));
 }
 
-const D4_geom = new THREE.TetrahedronGeometry();
-D4_geom.faceVertexUvs[0] = new Array(4).fill(triangleBoundary);
-D4_geom.faces.forEach((face, i) => {
-  face.materialIndex = i
-});
-
-
-const detailsByDiceType = {
-  4 :  {
-    geometry: D4_geom,
-    triangleFaceCount : 4,
-  },
-  6 :  { 
-    geometry: new THREE.BoxGeometry(),
-    triangleFaceCount: 12
-  },
-}
+const getMaterialArray = (numFaces, colorHex) => Array.apply(null, Array(numFaces)).map((_, i) =>
+  new THREE.MeshLambertMaterial({ color: colorHex, map: faces[i] }));
 
 class Die {
-  constructor(scene, numSides, colorHex = 0x00FF00) {
-    const details = detailsByDiceType[numSides];
-    const materialArray = Array.apply(null, Array(numSides)).map((_, i) => 
-      new THREE.MeshLambertMaterial({ color: colorHex, map: faces[i] }));
-    this.mesh = new THREE.Mesh(details.geometry, materialArray);
-    this.countTriangleFaces = details.triangleFaceCount;
+  constructor(scene, geometry, materialArray, triangleFaceCount) {
+    this.mesh = new THREE.Mesh(geometry, materialArray);
+    this.countTriangleFaces = triangleFaceCount;
     scene.add(this.mesh);
     console.log(this)
   }
@@ -76,4 +58,36 @@ class Die {
   }
 }
 
-export default Die;
+class D4 extends Die {
+  constructor(scene, colorHex = 0x00FF00) {
+    const materialArray = getMaterialArray(4, colorHex);
+    const D4_geom = new THREE.TetrahedronGeometry();
+    D4_geom.faceVertexUvs[0] = new Array(4).fill(triangleBoundary);
+    D4_geom.faces.forEach((face, i) => {
+      face.materialIndex = i
+    });
+    super(scene, D4_geom, materialArray, 4);
+  }
+}
+
+class D6 extends Die {
+  constructor(scene, colorHex = 0x00FF00) {
+    const materialArray = getMaterialArray(6, colorHex);
+    const D6_geom = new THREE.BoxGeometry();
+    super(scene, D6_geom, materialArray, 12);
+  }
+}
+
+class D8 extends Die {
+  constructor(scene, colorHex = 0x00FF00) {
+    const materialArray = getMaterialArray(8, colorHex);
+    const D8_geom = new THREE.OctahedronGeometry();
+    D8_geom.faceVertexUvs[0] = new Array(8).fill(triangleBoundary);
+    D8_geom.faces.forEach((face, i) => {
+      face.materialIndex = i
+    });
+    super(scene, D8_geom, materialArray, 8);
+  }
+}
+
+export { D4, D6, D8 };
