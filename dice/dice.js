@@ -20,7 +20,7 @@ const getMaterialArray = (numFaces, colorHex) => Array.apply(null, Array(numFace
 
 
 class D4 extends BaseDie {
-    constructor(scene, colorHex = 0x00FF00) {
+    constructor(scene, colorHex) {
         const materialArray = getMaterialArray(4, colorHex);
         const D4_geom = new THREE.TetrahedronGeometry(0.6);
         D4_geom.faceVertexUvs[0] = new Array(4).fill(triangleBoundary);
@@ -32,7 +32,7 @@ class D4 extends BaseDie {
 }
 
 class D6 extends BaseDie {
-    constructor(scene, colorHex = 0x00FF00) {
+    constructor(scene, colorHex) {
         const materialArray = getMaterialArray(6, colorHex);
         const D6_geom = new THREE.BoxGeometry(0.6);
         super(scene, D6_geom, materialArray, 12);
@@ -40,7 +40,7 @@ class D6 extends BaseDie {
 }
 
 class D8 extends BaseDie {
-    constructor(scene, colorHex = 0x00FF00) {
+    constructor(scene, colorHex) {
         const materialArray = getMaterialArray(8, colorHex);
         const D8_geom = new THREE.OctahedronGeometry(0.6);
         D8_geom.faceVertexUvs[0] = new Array(8).fill(triangleBoundary);
@@ -52,7 +52,7 @@ class D8 extends BaseDie {
 }
 
 class D20 extends BaseDie {
-    constructor(scene, colorHex = 0x00FF00) {
+    constructor(scene, colorHex) {
         const t = textureLoader.load(`./dice/faces/dd.png`)
         const materialArray = Array.apply(null, Array(20)).map((_, i) =>
             new THREE.MeshLambertMaterial({ color: colorHex, map: t }));
