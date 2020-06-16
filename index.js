@@ -1,5 +1,5 @@
 import * as THREE from './node_modules/three/build/three.module.js';
-import Die from './die.js';
+import { D4, D6, D8, D20 } from './dice/dice.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
