@@ -5,3 +5,10 @@ body {
 canvas {
     display: block;
 }
+
+.controlPanel {
+    height: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
