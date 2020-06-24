@@ -47,6 +47,9 @@ for (let i = 1; i < 21; i++) {
 const getDiceFaceMaterials = (numFaces, colorHex, threeMaterial) => Array.apply(null, Array(numFaces)).map((_, i) =>
     new threeMaterial({ color: colorHex, map: faces[i] }));
 
+const setMaterialIndices = (geom, materialMapping, trianglesPerFullface = 1) => geom.faces.forEach((face,i) => {
+    face.materialIndex = materialMapping[Math.floor(i / trianglesPerFullface)];
+})
 
 
 class D4 extends BaseDie {
@@ -54,9 +57,7 @@ class D4 extends BaseDie {
         const materialArray = getDiceFaceMaterials(4, colorHex, THREE.MeshToonMaterial);
         const D4_geom = new THREE.TetrahedronGeometry(radius);
         D4_geom.faceVertexUvs[0] = new Array(4).fill(triangleBoundary);
-        D4_geom.faces.forEach((face, i) => {
-            face.materialIndex = i
-        });
+        setMaterialIndices(D4_geom, [0, 1, 2, 3]);
         super(scene, D4_geom, materialArray, 4);
     }
 }
@@ -64,19 +65,18 @@ class D4 extends BaseDie {
 class D6 extends BaseDie {
     constructor(scene, colorHex) {
         const materialArray = getDiceFaceMaterials(6, colorHex, THREE.MeshToonMaterial);
-        const D6_geom = new THREE.BoxGeometry(cubeSide);
+        const D6_geom = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide);
+        setMaterialIndices(D6_geom, [0, 5, 2, 3, 4, 1], 2);
         super(scene, D6_geom, materialArray, 12);
     }
 }
 
 class D8 extends BaseDie {
     constructor(scene, colorHex) {
-        const materialArray = getDiceFaceMaterials(8, colorHex, THREE.MeshToonMaterial);
+        const materialArray = getDiceFaceMaterials(8, colorHex, THREE.MeshLambertMaterial);
         const D8_geom = new THREE.OctahedronGeometry(radius);
         D8_geom.faceVertexUvs[0] = new Array(8).fill(triangleBoundary);
-        D8_geom.faces.forEach((face, i) => {
-            face.materialIndex = i
-        });
+        setMaterialIndices(D8_geom, [0, 1, 2, 3, 6, 7, 4, 5]);
         super(scene, D8_geom, materialArray, 8);
     }
 }
@@ -86,23 +86,18 @@ class D12 extends BaseDie {
         const materialArray = getDiceFaceMaterials(12, colorHex, THREE.MeshLambertMaterial);
         const D12_geom = new THREE.DodecahedronGeometry(radius);
         D12_geom.faceVertexUvs[0] = (new Array(12).fill(pentagonBoundaries)).flat();
-        D12_geom.faces.forEach((face, i) => {
-            face.materialIndex = Math.floor(i/3);
-        });
+        setMaterialIndices(D12_geom, [0, 1, 2, 3, 10, 4, 5, 9, 11, 8, 6, 7], 3);
         super(scene, D12_geom, materialArray, 36);
     }
 }
 
 class D20 extends BaseDie {
     constructor(scene, colorHex) {
-        const t = textureLoader.load(`./dice/faces/dd.png`)
         const materialArray = getDiceFaceMaterials(20, colorHex, THREE.MeshLambertMaterial);
-        const D8_geom = new THREE.IcosahedronGeometry(radius);
-        D8_geom.faceVertexUvs[0] = new Array(20).fill(triangleBoundary);
-        D8_geom.faces.forEach((face, i) => {
-            face.materialIndex = i
-        });
-        super(scene, D8_geom, materialArray, 8);
+        const D20_geom = new THREE.IcosahedronGeometry(radius);
+        D20_geom.faceVertexUvs[0] = new Array(20).fill(triangleBoundary);
+        setMaterialIndices(D20_geom, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 16, 17, 18, 19, 15, 11, 10, 14, 13, 12]);
+        super(scene, D20_geom, materialArray, 20);
     }
 }
 
