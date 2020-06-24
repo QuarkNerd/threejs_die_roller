@@ -45,6 +45,10 @@ class DiceController {
         newDie.startRoll();
     }
 
+    reroll() {
+        this.diceList.forEach(c => c.startRoll())
+    }
+
     tick() {
         this.diceList.forEach(c => c.tick());
     }

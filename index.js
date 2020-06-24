@@ -35,3 +35,4 @@ document.getElementById("insert_D8").addEventListener('click', () => diceControl
 document.getElementById("insert_D10").addEventListener('click', () => diceController.addDie("D10"));
 document.getElementById("insert_D12").addEventListener('click', () => diceController.addDie("D12"));
 document.getElementById("insert_D20").addEventListener('click', () => diceController.addDie("D20"));
+document.getElementById("reroll").addEventListener('click', () => diceController.reroll());

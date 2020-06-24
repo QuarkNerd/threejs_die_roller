@@ -19,7 +19,6 @@ class BaseDie {
     const randomNum = Math.floor(Math.random() * this.countTriangleFaces);
     const randomFace = this.mesh.geometry.faces[randomNum];
     const normal = randomFace.normal;
-
     this.mesh.quaternion.setFromUnitVectors(normal, direction);
     this.targetX = (this.mesh.rotation.x+2*Math.PI)%(2*Math.PI);
   }
@@ -27,7 +26,7 @@ class BaseDie {
   tick() { 
     this.updateRotation();
   }
-  
+
   updateRotation() {
     const diff = (this.mesh.rotation.x - this.targetX) %(2*Math.PI);
     const rotation = this.mesh.rotation;
