@@ -1,11 +1,11 @@
 import { D4, D6, D8, D12, D20 } from './dice.js';
 
 const diceByString = {
-    "D4" : D4,
-    "D6" : D6,
-    "D8" : D8,
-    "D12" : D12,
-    "D20" : D20,
+    "D4": D4,
+    "D6": D6,
+    "D8": D8,
+    "D12": D12,
+    "D20": D20,
 }
 
 function calculateCoorForSpiral(n) {
@@ -25,7 +25,7 @@ function calculateCoorForSpiral(n) {
     if (4 * anc_coor + 4 < diff && diff <= 6 * anc_coor + 6) {
         return { x: -anc_coor - 1, y: + 5 * anc_coor + 5 - diff };
     }
-    return { x: -7 * anc_coor - 7 + diff , y: -anc_coor -1 };
+    return { x: -7 * anc_coor - 7 + diff, y: -anc_coor - 1 };
 }
 
 class DiceController {
@@ -40,8 +40,8 @@ class DiceController {
         const newDie = new dieClass(this.scene, colorHex);
         const n = this.diceList.push(newDie);
         const { x, y } = calculateCoorForSpiral(n)
-        newDie.mesh.position.x = x; 
-        newDie.mesh.position.y = y; 
+        newDie.mesh.position.x = x;
+        newDie.mesh.position.y = y;
         newDie.startRoll();
     }
 

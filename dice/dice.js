@@ -4,7 +4,7 @@ import BaseDie from './baseDie.js'
 const textureLoader = new THREE.TextureLoader();
 
 const radius = 0.5;
-const cubeSide = 2*radius/Math.sqrt(3);
+const cubeSide = 2 * radius / Math.sqrt(3);
 
 // boundary designed to fit square perfectly in triangle
 const triangleBoundary = [
@@ -34,9 +34,9 @@ const coor = {
 }
 
 const pentagonBoundaries = [
-    [ coor.W, coor.V, coor.X ], 
-    [ coor.V, coor.Z, coor.X ],
-    [ coor.Z, coor.Y, coor.X ]
+    [coor.W, coor.V, coor.X],
+    [coor.V, coor.Z, coor.X],
+    [coor.Z, coor.Y, coor.X]
 ];
 
 const faces = [];
@@ -47,7 +47,7 @@ for (let i = 1; i < 21; i++) {
 const getDiceFaceMaterials = (numFaces, colorHex, threeMaterial) => Array.apply(null, Array(numFaces)).map((_, i) =>
     new threeMaterial({ color: colorHex, map: faces[i] }));
 
-const setMaterialIndices = (geom, materialMapping, trianglesPerFullface = 1) => geom.faces.forEach((face,i) => {
+const setMaterialIndices = (geom, materialMapping, trianglesPerFullface = 1) => geom.faces.forEach((face, i) => {
     face.materialIndex = materialMapping[Math.floor(i / trianglesPerFullface)];
 })
 
