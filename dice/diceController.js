@@ -35,9 +35,9 @@ class DiceController {
         this.diceList = [];
     }
 
-    addDie(type, colorHex = 0x00FF00) {
+    addDie(type, onRollEnd ,colorHex = 0x00FF00) {
         const dieClass = diceByString[type];
-        const newDie = new dieClass(this.scene, colorHex);
+        const newDie = new dieClass(this.scene, onRollEnd ,colorHex);
         const n = this.diceList.push(newDie);
         const { x, y } = calculateCoorForSpiral(n)
         newDie.mesh.position.x = x;

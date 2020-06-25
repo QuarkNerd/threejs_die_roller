@@ -7,7 +7,7 @@ canvas {
 }
 
 .controlPanel {
-    height: 3em;
+    padding-top: 5px;
     display: flex;
     align-items: center;
     justify-content: space-around;
