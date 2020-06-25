@@ -10,9 +10,13 @@ class BaseDie {
     console.log(this)
   }
 
-  getMutablePosition = () => this.mesh.position;
-
-  getMutableRotation = () => this.mesh.rotation;
+  setPosition(newPos) {
+    ['x', 'y', 'z'].forEach(dim => {
+      if (newPos[dim] !== undefined) {
+        this.mesh.position[dim] = newPos[dim];
+      }
+    })
+  }
 
   startRoll() {
     this.rolling = true;

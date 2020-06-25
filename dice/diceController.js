@@ -40,8 +40,7 @@ class DiceController {
         const newDie = new dieClass(this.scene, onRollEnd ,colorHex);
         const n = this.diceList.push(newDie);
         const { x, y } = calculateCoorForSpiral(n)
-        newDie.mesh.position.x = x;
-        newDie.mesh.position.y = y;
+        newDie.setPosition( {x , y} )
         newDie.startRoll();
     }
 
