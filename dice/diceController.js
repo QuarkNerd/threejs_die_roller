@@ -1,9 +1,10 @@
-import { D4, D6, D8, D12, D20 } from './dice.js';
+import { D4, D6, D8, D10, D12, D20 } from './dice.js';
 
 const diceByString = {
     "D4": D4,
     "D6": D6,
     "D8": D8,
+    "D10": D10,
     "D12": D12,
     "D20": D20,
 }
@@ -45,7 +46,7 @@ class DiceController {
     }
 
     reroll() {
-        this.diceList.forEach(c => c.startRoll())
+        this.diceList.forEach(c => c.startRoll());
     }
 
     tick() {

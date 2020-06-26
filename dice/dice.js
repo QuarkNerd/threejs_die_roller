@@ -1,5 +1,6 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 import BaseDie from './baseDie.js'
+import getPentagonalTrapezohedronGeometry from './pentagonalTrapezohedronGeometry.js';
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -38,6 +39,14 @@ const pentagonBoundaries = [
     [coor.V, coor.Z, coor.X],
     [coor.Z, coor.Y, coor.X]
 ];
+
+const zeroVector = new THREE.Vector2(0, 0);
+
+const emptyTriangleBound = [
+    zeroVector,
+    zeroVector,
+    zeroVector,
+]
 
 const faces = [];
 for (let i = 1; i < 21; i++) {
@@ -81,6 +90,16 @@ class D8 extends BaseDie {
     }
 }
 
+class D10 extends BaseDie {
+    constructor(scene, onRollEnd, colorHex) {
+        const materialArray = getDiceFaceMaterials(10, colorHex, THREE.MeshLambertMaterial);
+        const D10_geom = getPentagonalTrapezohedronGeometry(radius, radius);
+        D10_geom.faceVertexUvs[0] = (new Array(10).fill([triangleBoundary, emptyTriangleBound])).flat();
+        setMaterialIndices(D10_geom, [0, 1, 2, 3, 4, 5, 9, 8, 7, 6], 2);
+        super(scene, D10_geom, materialArray, 20, onRollEnd);
+    }
+}
+
 class D12 extends BaseDie {
     constructor(scene, onRollEnd, colorHex) {
         const materialArray = getDiceFaceMaterials(12, colorHex, THREE.MeshLambertMaterial);
@@ -101,4 +120,4 @@ class D20 extends BaseDie {
     }
 }
 
-export { D4, D6, D8, D12, D20 }
+export { D4, D6, D8, D10, D12, D20 }
