@@ -1,22 +1,9 @@
 import * as THREE from './node_modules/three/build/three.module.js';
 import DiceController from './dice/diceController.js';
 
-const horizontal = window.innerHeight < window.innerWidth;
-const sceneSize = horizontal ? window.innerHeight : window.innerWidth;
-if (horizontal) {
-  document.getElementById("main").classList.add("screenIsHorizontal");
-} else {
-  document.getElementById("buttonHolder").classList.add("screenIsVertical");
-}
-const button = document.getElementById("insert_D6");
-const buttonSize = button.offsetHeight < button.offsetWidth ? button.offsetHeight : button.offsetWidth;
-const buttonList = document.getElementsByClassName("button");
-for (let item of buttonList) {
-  item.style["font-size"] = 0.5*buttonSize + "px";
-}
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(sceneSize, sceneSize);
+let renderer;
 
+setSizesAndRenderer()
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -27,13 +14,11 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.z = 10;
 
-document.getElementById("diceBoard").appendChild(renderer.domElement);
 
 var spotLight = new THREE.SpotLight(0xffffff);
 spotLight.position.set(0, 0, 10);
 
 scene.add(spotLight);
-renderer.setClearColor(0xCDCDCD, 1);
 
 const diceController = new DiceController(scene);
 
@@ -54,10 +39,14 @@ const setSum = a => {
   document.getElementById(`insert_D${numSides}`).addEventListener('click', () => diceController.addDie("D" + numSides, addToSum))
 )
 
-document.getElementById("reroll").addEventListener('click', () => {
+document.getElementById("roll").addEventListener('click', () => {
   diceController.reroll();
   setSum(0);
 });
+
+window.addEventListener('resize', setSizesAndRenderer);
+
+animate();
 
 function animate() {
   diceController.tick();
@@ -65,5 +54,26 @@ function animate() {
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
-animate();
 
+function setSizesAndRenderer() {
+  const horizontal = window.innerHeight < window.innerWidth;
+  const sceneSize = horizontal ? window.innerHeight : window.innerWidth;
+  if (horizontal) {
+    document.getElementById("main").classList.add("screenIsHorizontal");
+    document.getElementById("buttonHolder").classList.remove("screenIsVertical");
+  } else {
+    document.getElementById("buttonHolder").classList.add("screenIsVertical");
+    document.getElementById("main").classList.remove("screenIsHorizontal");
+  }
+  const button = document.getElementById("insert_D6");
+  const buttonSize = button.offsetHeight < button.offsetWidth ? button.offsetHeight : button.offsetWidth;
+  const buttonList = document.getElementsByClassName("button");
+  for (let item of buttonList) {
+    item.style["font-size"] = 0.4 * buttonSize + "px";
+  }
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(sceneSize, sceneSize);
+  document.getElementById("diceBoard").innerHTML = "";
+  document.getElementById("diceBoard").appendChild(renderer.domElement);
+  renderer.setClearColor(0xCDCDCD, 1);
+}
