@@ -63,7 +63,7 @@ const setMaterialIndices = (geom, materialMapping, trianglesPerFullface = 1) => 
 
 class D4 extends BaseDie {
     constructor(scene, onRollEnd, colorHex) {
-        const materialArray = getDiceFaceMaterials(4, colorHex, THREE.MeshToonMaterial);
+        const materialArray = getDiceFaceMaterials(4, colorHex, THREE.MeshLambertMaterial);
         const D4_geom = new THREE.TetrahedronGeometry(radius);
         D4_geom.faceVertexUvs[0] = new Array(4).fill(triangleBoundary);
         setMaterialIndices(D4_geom, [0, 1, 2, 3]);
@@ -73,7 +73,7 @@ class D4 extends BaseDie {
 
 class D6 extends BaseDie {
     constructor(scene, onRollEnd, colorHex) {
-        const materialArray = getDiceFaceMaterials(6, colorHex, THREE.MeshToonMaterial);
+        const materialArray = getDiceFaceMaterials(6, colorHex, THREE.MeshLambertMaterial);
         const D6_geom = new THREE.BoxGeometry(cubeSide, cubeSide, cubeSide);
         setMaterialIndices(D6_geom, [0, 5, 2, 3, 4, 1], 2);
         super(scene, D6_geom, materialArray, 12, onRollEnd);

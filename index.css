@@ -1,5 +1,16 @@
 body {
     margin: 0;
+    height: 100vh;
+}
+
+#main {
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+}
+
+#main.screenIsHorizontal {
+flex-flow: row;
 }
 
 canvas {
@@ -7,8 +18,23 @@ canvas {
 }
 
 .controlPanel {
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+}
+
+#buttonHolder {
     padding-top: 5px;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    flex: 1 1 auto;
+    align-items: stretch;
+    flex-flow: column;
+}
+
+#buttonHolder.screenIsVertical {
+    flex-flow: row;
+}
+
+.button {
+    flex: 1 1 auto;
 }

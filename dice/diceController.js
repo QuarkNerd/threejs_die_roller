@@ -30,9 +30,8 @@ function calculateCoorForSpiral(n) {
 }
 
 class DiceController {
-    constructor(scene, width, height) {
+    constructor(scene) {
         this.scene = scene;
-        this.dimensions = { height, width };
         this.diceList = [];
     }
 
