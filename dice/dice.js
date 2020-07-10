@@ -27,11 +27,11 @@ const triangleBoundary = [
 // threejs splits pentagon into three triangles, WCX, XVZ and XZY
 
 const coor = {
-    V: new THREE.Vector2(0.0285, -0.0877),
-    W: new THREE.Vector2(-0.2629, 0.8001),
-    X: new THREE.Vector2(0.5, 1.697),
-    Y: new THREE.Vector2(1.263, 0.8001),
-    Z: new THREE.Vector2(0.9714, -0.0877),
+    V: new THREE.Vector2(0.0285, -0.2877),
+    W: new THREE.Vector2(-0.2629, 0.6001),
+    X: new THREE.Vector2(0.5, 1.497),
+    Y: new THREE.Vector2(1.263, 0.6001),
+    Z: new THREE.Vector2(0.9714, -0.2877),
 }
 
 const pentagonBoundaries = [

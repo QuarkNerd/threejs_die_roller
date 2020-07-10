@@ -38,9 +38,9 @@ window.addEventListener('resize', setSizesAndRenderer);
 
 function animate() {
   diceController.tick();
-  // camer tick
+  // camera tick
   if (Math.abs(camera.position.z - cameraZTarget) > 0.1) {
-    camera.position.z += 0.03;
+    camera.position.z += 0.05;
   }
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
