@@ -30,8 +30,9 @@ function calculateCoorForSpiral(n) {
 }
 
 class DiceController {
-    constructor(scene) {
+    constructor(scene, farthestCoorCallback) {
         this.scene = scene;
+        this.farthestCoorCallback = farthestCoorCallback;
         this.diceList = [];
     }
 
@@ -39,8 +40,9 @@ class DiceController {
         const dieClass = diceByString[type];
         const newDie = new dieClass(this.scene, onRollEnd ,colorHex);
         const n = this.diceList.push(newDie);
-        const { x, y } = calculateCoorForSpiral(n)
-        newDie.setPosition( {x , y} )
+        const coor = calculateCoorForSpiral(n);
+        newDie.setPosition( coor );
+        this.farthestCoorCallback(coor);
         newDie.startRoll();
     }
 

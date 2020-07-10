@@ -2,38 +2,27 @@ import * as THREE from './node_modules/three/build/three.module.js';
 import DiceController from './dice/diceController.js';
 
 let renderer;
-
-setSizesAndRenderer()
-
+let sum = 0;
+let cameraZTarget = 2;
+const FOVdegrees = 65;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  75,
+  FOVdegrees,
   1,
   0.1,
   1000
 );
-camera.position.z = 10;
+camera.position.z = cameraZTarget;
 
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.z = 2;
+scene.add(directionalLight);
 
-var spotLight = new THREE.SpotLight(0xffffff);
-spotLight.position.set(0, 0, 10);
+const diceController = new DiceController(scene, setZFromDieCoor);
 
-scene.add(spotLight);
+setSizesAndRenderer()
+animate();
 
-const diceController = new DiceController(scene);
-
-let sum = 0;
-
-const displaySum = () => document.getElementById('total_score').innerHTML = `Total: ${sum}`;
-
-const addToSum = a => {
-  sum += a;
-  displaySum();
-}
-const setSum = a => {
-  sum = a;
-  displaySum();
-}
 
 [4, 6, 8, 10, 12, 20].forEach(numSides =>
   document.getElementById(`insert_D${numSides}`).addEventListener('click', () => diceController.addDie("D" + numSides, addToSum))
@@ -46,11 +35,13 @@ document.getElementById("roll").addEventListener('click', () => {
 
 window.addEventListener('resize', setSizesAndRenderer);
 
-animate();
 
 function animate() {
   diceController.tick();
-
+  // camer tick
+  if (Math.abs(camera.position.z - cameraZTarget) > 0.1) {
+    camera.position.z += 0.03;
+  }
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
@@ -76,4 +67,32 @@ function setSizesAndRenderer() {
   document.getElementById("diceBoard").innerHTML = "";
   document.getElementById("diceBoard").appendChild(renderer.domElement);
   renderer.setClearColor(0xCDCDCD, 1);
+}
+
+function setZFromDieCoor(coor) {
+  const x = Math.abs(coor.x) + 1;
+  const y = Math.abs(coor.y) + 1;
+  console.log({x,y})
+  const dist = Math.max(x, y);
+  console.log({dist})
+  const FOVradians = FOVdegrees * Math.PI/ 180;
+  const minZ = dist / Math.tan(FOVradians / 2); 
+  if (minZ > camera.position.z) {
+    cameraZTarget = minZ;
+    console.log(99);
+  }
+}
+
+function updateSumDisplay() {
+  document.getElementById('total_score').innerHTML = `Total: ${sum}`;
+}
+
+function addToSum(a) {
+  sum += a;
+  updateSumDisplay();
+}
+
+function setSum(a) {
+  sum = a;
+  updateSumDisplay();
 }
